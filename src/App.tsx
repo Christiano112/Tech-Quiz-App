@@ -9,6 +9,8 @@ import ErrorPage from './components/error';
 import Footer from './components/footer';
 import Navbar from './components/navbar';
 import DashBoard from './components/dashboard';
+import Settings from './components/settings';
+import Form from './components/form';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/dashBoard" element={<DashBoard />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="update" element={<Form />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
 

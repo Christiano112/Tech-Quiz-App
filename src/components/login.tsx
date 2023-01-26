@@ -1,10 +1,11 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from './config/firebase'
+import { auth } from './config/firebase';
 
 const Login = () => {
+  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const onSubmit = (data: any) => {
     console.log(data);
@@ -16,6 +17,9 @@ const Login = () => {
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(user)
+        setTimeout(() => {
+          navigate('/')
+        }, 3000)
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -53,3 +57,6 @@ const Login = () => {
 }
 
 export default Login;
+
+
+// 6ShujKXLTHbxHQU

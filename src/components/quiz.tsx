@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +14,13 @@ const Quiz = (quizCategory: any) => {
     const navigate = useNavigate();
     const quizSection = useRef<HTMLDivElement>(null);
 
+    let myLinuxScore: any;
+    let myDevOpsScore: any;
+    let myCodeScore: any;
+    let mySQLScore: any;
+    let myCurrentScore: any;
+    let quizObj: any;
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
@@ -26,7 +33,7 @@ const Quiz = (quizCategory: any) => {
                 }
             })
             const data = await res.data
-            console.log(data);
+            // console.log(data);
             setQuestions(data);
             setTimeout(() => {
                 setLoading(false);
@@ -36,7 +43,29 @@ const Quiz = (quizCategory: any) => {
         fetchData()
             .catch(console.error)
 
-        localStorage.setItem('score', JSON.stringify(score));
+        myLinuxScore = Number(localStorage.getItem('Linux-score'));
+        myDevOpsScore = Number(localStorage.getItem('DevOps-score'));
+        myCodeScore = Number(localStorage.getItem('Code-score'));
+        mySQLScore = Number(localStorage.getItem('SQL-score'));
+        // myTotalScore = Number(myLinuxScore) + Number(myDevOpsScore) + Number(myCodeScore) + Number(mySQLScore);
+        // setTotalScore(myTotalScore);
+
+        quizObj = Object.values(quizCategory).toString();
+        // console.log(quizObj)
+
+        if (quizObj === 'Linux' && myLinuxScore !== null) {
+            myCurrentScore = myLinuxScore;
+        } else if (quizObj === 'DevOps' && myDevOpsScore !== null) {
+            myCurrentScore = myDevOpsScore;
+        } else if (quizObj === 'Code' && myCodeScore !== null) {
+            myCurrentScore = myCodeScore;
+        } else if (quizObj === 'SQL' && mySQLScore !== null) {
+            myCurrentScore = mySQLScore;
+        } else {
+            myCurrentScore = 0;
+        }
+
+        localStorage.setItem(`${Object.values(quizCategory)}-score`, JSON.stringify(myCurrentScore));
 
     }, []);
 
@@ -62,6 +91,7 @@ const Quiz = (quizCategory: any) => {
                 <div>
                     <div className='p-4 shadow-md bg-pink-700 text-white select-none' ref={quizSection}>
                         <h2 className='text-white font-bold text-xl'>{`Score: ${score}`}</h2>
+
                         {questions && questions.slice(skip, skip + 1).map((q: {
                             id: React.Key;
                             question: string;
@@ -103,25 +133,31 @@ const Quiz = (quizCategory: any) => {
                                     <div className='flex flex-col gap-4 w-full'>
                                         <button onClick={() => setAnswerValue(optionA)}
                                             className='options'
-                                        >{`A. ${optionA}`}</button>
+                                        >{optionA}</button>
                                         <button onClick={() => setAnswerValue(optionB)}
                                             className='options'
-                                        >{`B. ${optionB}`}</button>
+                                        >{optionB}</button>
                                         <button onClick={() => setAnswerValue(optionC)}
                                             className='options'
-                                        >{`C. ${optionC}`}</button>
+                                            style={{ display: optionC === "null" ? "none" : "block" }}
+                                        >{optionC !== "null" && optionC}</button>
                                         <button onClick={() => setAnswerValue(optionD)}
                                             className='options'
-                                        >{`D. ${optionD}`}</button>
+                                            style={{ display: optionD === "null" ? "none" : "block" }}
+                                        >{optionD !== "null" && optionD}</button>
                                         <button onClick={() => setAnswerValue(optionE)}
                                             className='options'
-                                        >{`E. None of the Above`}</button>
+                                        >{`No Answer`}</button>
                                     </div>
 
                                     <p className='text-center font-bold text-xl mt-8'>{`Question ${page}`}</p>
 
                                     <div className='flex justify-center items-center gap-4 mt-4'>
-                                        <button disabled={page <= 1} onClick={() => setPage(page => page - 1)}
+                                        <button disabled={page <= 1} onClick={() => {
+                                            setPage(page => page - 1);
+                                            setScore((score) => score - 1);
+                                            setAnswerValue("");
+                                        }}
                                             className='py-1 px-4 rounded-full bg-sky-600 shadow-lg font-bold m-2 select-none'>Prev</button>
                                         <button onClick={() => {
                                             if (page < 20) {
@@ -134,6 +170,8 @@ const Quiz = (quizCategory: any) => {
                                             if (answerValue === correctAnswerValue) {
                                                 setScore((score) => score + 1);
                                             };
+
+                                            localStorage.setItem(`${Object.values(quizCategory)}-score`, JSON.stringify(score));
                                         }}
                                             className='py-1 px-4 rounded-full bg-sky-600 shadow-lg font-bold m-2 select-none'>Next</button>
                                     </div>
@@ -143,7 +181,7 @@ const Quiz = (quizCategory: any) => {
                     </div>
 
                     {showModal && (
-                        <section className="text-center py-8 p-4 shadow-md bg-pink-700 text-white">
+                        <section className="text-center py-40 px-4 shadow-md bg-pink-700 text-white">
                             <h1 className='text-3xl font-bold'>
                                 {`Your Score is ${score}`}
                             </h1>

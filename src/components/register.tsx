@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { auth } from './config/firebase'
 
 
@@ -23,6 +23,12 @@ const Register = () => {
                 console.log(errorCode)
                 const errorMessage = error.message;
                 console.log(errorMessage)
+            });
+
+        sendEmailVerification(auth.currentUser)
+            .then(() => {
+                // Email verification sent!
+                // ...
             });
     };
 

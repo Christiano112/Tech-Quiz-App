@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import Quiz from "./quiz";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from './config/firebase';
 
 const category = [
     {
@@ -24,16 +26,36 @@ const category = [
     },
 ]
 
-let myScore: any;
+let myLinuxScore: any;
+let myDevOpsScore: any;
+let myCodeScore: any;
+let mySQLScore: any;
+let myTotalScore: any;
 
 const Home = () => {
     const [quizCategory, setQuizCategory] = useState("");
     const [show, setShow] = useState(true);
     const [score, setScore] = useState(0);
+    const [userName, setUserName] = useState("");
 
     useEffect(() => {
-        myScore = localStorage.getItem('score');
-        setScore(myScore);
+        myLinuxScore = localStorage.getItem('Linux-score');
+        myDevOpsScore = localStorage.getItem('DevOps-score');
+        myCodeScore = localStorage.getItem('Code-score');
+        mySQLScore = localStorage.getItem('SQL-score');
+        myTotalScore = Number(myLinuxScore) + Number(myDevOpsScore) + Number(myCodeScore) + Number(mySQLScore);
+        setScore(myTotalScore);
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // console.log(user)
+                if (user.displayName) {
+                    setUserName(user.displayName)
+                }
+            } else {
+                // User is signed out
+            }
+        });
     }, [])
 
     return (
@@ -42,12 +64,12 @@ const Home = () => {
                 <main>
                     <div className="flex items-center justify-between px-4 pt-4">
                         <div className="flex items-center gap-2">
-                            <p>Level 1</p>
-                            <p>{`Score ${score}`}</p>
+                            <p>Welcome</p>
+                            <p className="font-bold">{userName && userName}</p>
                         </div>
                         <div className="flex items-center gap-2">
                             <img src="/coin-min.jpeg" alt="coins" className="w-8 h-8 rounded-full" />
-                            <span className="font-bold">300</span>
+                            <span className="font-bold">{`${score}`}</span>
                         </div>
                     </div>
 
