@@ -1,24 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import Home from './components/home';
+import Register from './components/register';
+import Login from './components/login';
+import Quiz from './components/quiz';
+import ErrorPage from './components/error';
+import Footer from './components/footer';
+import Navbar from './components/navbar';
+import DashBoard from './components/dashboard';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='min-h-[100vh] h-[100%]'>
+      <Navbar />
+
+      <Routes>
+        <Route index path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/quiz" element={<Quiz />} />
+        <Route path="/dashBoard" element={<DashBoard />} />
+        <Route path="*" element={<ErrorPage />} />
+      </Routes>
+
+      <Footer />
     </div>
   );
 }
