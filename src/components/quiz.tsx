@@ -1,18 +1,17 @@
 import React from 'react'
-import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Quiz = (quizCategory: any) => {
-    const [questions, setQuestions]: any = useState("");
-    const [loading, setLoading] = useState(true);
-    const [page, setPage] = useState(1);
-    const [answerValue, setAnswerValue] = useState("");
-    const [score, setScore] = useState(0);
-    const [showModal, setShowModal] = useState(false);
+    const [questions, setQuestions]: any = React.useState("");
+    const [loading, setLoading] = React.useState(true);
+    const [page, setPage] = React.useState(1);
+    const [answerValue, setAnswerValue] = React.useState("");
+    const [score, setScore] = React.useState(0);
+    const [showModal, setShowModal] = React.useState(false);
 
     const navigate = useNavigate();
-    const quizSection = useRef<HTMLDivElement>(null);
+    const quizSection = React.useRef<HTMLDivElement>(null);
 
     let myLinuxScore: any;
     let myDevOpsScore: any;
@@ -21,7 +20,7 @@ const Quiz = (quizCategory: any) => {
     let myCurrentScore: any;
     let quizObj: any;
 
-    useEffect(() => {
+    React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
             const res = await axios({
@@ -82,7 +81,7 @@ const Quiz = (quizCategory: any) => {
     }
 
     return (
-        <>
+        <React.Fragment>
             {loading ?
                 <div className="flex justify-center items-center my-8">
                     <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-pink-800" />
@@ -189,7 +188,7 @@ const Quiz = (quizCategory: any) => {
                     )}
                 </div>
             }
-        </>
+        </React.Fragment>
     )
 }
 

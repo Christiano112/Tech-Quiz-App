@@ -1,34 +1,26 @@
 import React from 'react';
 import './App.css';
-import { Routes, Route } from 'react-router-dom';
-import Home from './components/home';
-import Register from './components/register';
-import Login from './components/login';
 import Quiz from './components/quiz';
 import ErrorPage from './components/error';
-import Footer from './components/footer';
-import Navbar from './components/navbar';
 import DashBoard from './components/dashboard';
 import Settings from './components/settings';
 import Form from './components/form';
+import SignIn from './components/signin';
+import Layout from './components/layout';
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <div className='min-h-[100vh] h-[100%]'>
-      <Navbar />
-
+    <div className='min-h-[100vh] h-[100vh]'>
       <Routes>
-        <Route index path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route index path="/" element={<Layout />} />
+        <Route path="/signin" element={<SignIn  />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/dashBoard" element={<DashBoard />} />
         <Route path="/settings" element={<Settings />} />
-        <Route path="update" element={<Form />} />
+        <Route path="/update" element={<Form />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
-
-      <Footer />
     </div>
   );
 }

@@ -25,22 +25,22 @@ const Form = ({ }) => {
     }
 
     return (
-        <section className='p-8 bg-sky-600'>
-            <h1 className='text-center font-bold text-2xl text-pink-500 mb-10'>Update Username and Picture</h1>
-            <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 items-end md:items-end md:mr-[50%]'>
+        <section className='bg-slate-800 h-[100vh] overflow-y-hidden'>
+            <h1 className='text-xl md:text-3xl text-center text-slate-800 font-bold py-8 px-4 bg-white mt-24 sm:mt-32 w-[90%] mx-auto rounded-t-lg'>Update Username and Picture</h1>
+            <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 justify-center items-center bg-white w-[90%] mx-auto shadow-lg rounded-b-lg pt-8'>
                 <div>
-                    <label htmlFor="username">Username</label>
                     <input type='text' {...register('username', {
                         required: 'Username is required',
                         minLength: { value: 8, message: 'Password must be at least 8 characters' },
-                    })} />
+                    })} className='input' placeholder='Username'
+                    />
                 </div>
 
                 <div>
-                    <label htmlFor="pic">Profile Pic</label>
                     <input type='text' {...register('profilePic', {
                         required: 'Please upload a profile picture',
-                    })} />
+                    })} className='input' placeholder='Upload Profile Picture "URL Format"'
+                    />
                 </div>
 
                 <button type="submit" className='btn'>Update</button>

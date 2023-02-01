@@ -10,5 +10,9 @@
 }
 
 .btn {
-  @apply cursor-pointer text-white rounded-lg shadow-lg select-none p-2 bg-pink-500 w-[25%] mt-8 mb-16;
+  @apply cursor-pointer text-white rounded-lg shadow-lg select-none p-2 bg-pink-500 w-[25%] mt-8 mb-16 text-sm md:text-lg;
+}
+
+.input {
+  @apply px-4 py-2 rounded overflow-visible cursor-text border outline-none bg-white placeholder:text-slate-400 text-slate-800 focus:border-pink-500;
 }

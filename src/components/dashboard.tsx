@@ -19,6 +19,7 @@ import {
 import React, { MouseEvent, useRef } from 'react';
 import type { InteractionItem } from 'chart.js'
 import { Pie } from 'react-chartjs-2';
+import Navbar from './navbar';
 
 let myLinuxScore: any;
 let myDevOpsScore: any;
@@ -141,38 +142,41 @@ const DashBoard = () => {
 
 
     return (
-        <div className='mt-8'>
-            <h1 className='text-center font-bold text-2xl text-pink-500 mb-8'>This is your Dashboard</h1>
-            <h2 className='text-center font-bold text-xl mb-4 text-pink-500'>Your Total Score is: <span className='text-pink-500 font-black'>{totalScore}</span></h2>
+        <React.Fragment>
+            <Navbar />
+            <div className='mt-8'>
+                <h1 className='text-center font-bold text-2xl text-pink-500 mb-8'>This is your Dashboard</h1>
+                <h2 className='text-center font-bold text-xl mb-4 text-pink-500'>Your Total Score is: <span className='text-pink-500 font-black'>{totalScore}</span></h2>
 
-            <div className='flex flex-col gap-4'>
-                <h3 className='font-bold text-xl'>Which Chart Format Would You Like To See?</h3>
-                <button onClick={() => setShowChart("bar")}
-                    className='cursor-pointer text-white rounded-lg shadow-lg select-none p-2 bg-pink-500 w-[25%] mt-2 mb-2'>
-                    Bar
-                </button>
-                <button onClick={() => setShowChart("pie")}
-                    className='cursor-pointer text-white rounded-lg shadow-lg select-none p-2 bg-pink-500 w-[25%] mt-2 mb-2'>
-                    Pie
-                </button>
+                <div className='flex flex-col gap-4 justify-center items-center'>
+                    <h3 className='font-bold text-xl'>Which Chart Format Would You Like To See Scores?</h3>
+                    <button onClick={() => setShowChart("bar")}
+                        className='cursor-pointer text-white rounded-lg shadow-lg select-none p-2 bg-pink-500 w-[25%] mt-2 mb-2'>
+                        Bar
+                    </button>
+                    <button onClick={() => setShowChart("pie")}
+                        className='cursor-pointer text-white rounded-lg shadow-lg select-none p-2 bg-pink-500 w-[25%] mt-2 mb-2'>
+                        Pie
+                    </button>
+                </div>
+
+                <div className='p-4 flex items-center justify-center my-16'>
+                    {
+                        showChart === "bar" && <Chart
+                            ref={chartRef}
+                            type='bar'
+                            onClick={onClick}
+                            options={options}
+                            data={barData}
+                        />
+                    }
+
+                    {
+                        showChart === "pie" && <Pie data={pieData} />
+                    }
+                </div>
             </div>
-
-            <div className='p-4 flex items-center justify-center my-16'>
-                {
-                    showChart === "bar" && <Chart
-                        ref={chartRef}
-                        type='bar'
-                        onClick={onClick}
-                        options={options}
-                        data={barData}
-                    />
-                }
-
-                {
-                    showChart === "pie" && <Pie data={pieData} />
-                }
-            </div>
-        </div>
+        </React.Fragment>
     )
 }
 

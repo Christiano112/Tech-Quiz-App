@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React from "react";
 import Quiz from "./quiz";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from './config/firebase';
@@ -33,12 +33,12 @@ let mySQLScore: any;
 let myTotalScore: any;
 
 const Home = () => {
-    const [quizCategory, setQuizCategory] = useState("");
-    const [show, setShow] = useState(true);
-    const [score, setScore] = useState(0);
-    const [userName, setUserName] = useState("");
+    const [quizCategory, setQuizCategory] = React.useState("");
+    const [show, setShow] = React.useState(true);
+    const [score, setScore] = React.useState(0);
+    const [userName, setUserName] = React.useState("");
 
-    useEffect(() => {
+    React.useEffect(() => {
         myLinuxScore = localStorage.getItem('Linux-score');
         myDevOpsScore = localStorage.getItem('DevOps-score');
         myCodeScore = localStorage.getItem('Code-score');
@@ -59,7 +59,7 @@ const Home = () => {
     }, [])
 
     return (
-        <>
+        <React.Fragment>
             {show ?
                 <main>
                     <div className="flex items-center justify-between px-4 pt-4">
@@ -94,7 +94,7 @@ const Home = () => {
                 :
                 <Quiz quizCategory={quizCategory} />
             }
-        </>
+        </React.Fragment>
     )
 }
 
