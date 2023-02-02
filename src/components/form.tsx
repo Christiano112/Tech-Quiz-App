@@ -1,10 +1,13 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { auth } from './config/firebase';
 import { updateProfile } from 'firebase/auth';
+import Modal from './modal';
 
 const Form = ({ }) => {
+    const [modalMessage, setModalMessage] = React.useState('');
+    const [showModal, setShowModal] = React.useState(false);
     const navigate = useNavigate();
 
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -15,12 +18,22 @@ const Form = ({ }) => {
             displayName: data.username, photoURL: `${data.profilePic}`
         }).then(() => {
             // Profile updated!
-            alert("Profile updated!")
+            setModalMessage('Profile updated successfully');
+            setShowModal(true);
+            setTimeout(() => {
+                setShowModal(false);
+                navigate('/');
+            }, 3000)
             console.log([auth.currentUser?.displayName, auth.currentUser?.photoURL])
 
         }).catch((error) => {
             // An error occurred
-            console.log(error)
+            console.log(error);
+            setModalMessage('Error updating profile');
+            setShowModal(true);
+            setTimeout(() => {
+                setShowModal(false);
+            }, 3000)
         });
     }
 
@@ -31,20 +44,24 @@ const Form = ({ }) => {
                 <div>
                     <input type='text' {...register('username', {
                         required: 'Username is required',
-                        minLength: { value: 8, message: 'Password must be at least 8 characters' },
-                    })} className='input' placeholder='Username'
+                    })} aria-invalid={errors.username ? "true" : "false"}
+                        className='input' placeholder='Username'
                     />
+                    {errors.username && <p role="alert" className='text-red-600 text-xs'>{`${errors.username?.message}`}</p>}
                 </div>
 
                 <div>
-                    <input type='text' {...register('profilePic', {
-                        required: 'Please upload a profile picture',
-                    })} className='input' placeholder='Upload Profile Picture "URL Format"'
+                    <input type='text' {...register('profilePic')}
+                        className='input' placeholder='Image Link "URL Format"'
                     />
                 </div>
 
                 <button type="submit" className='btn'>Update</button>
             </form>
+            {showModal &&
+                <Modal>
+                    {modalMessage}
+                </Modal>}
         </section>
     )
 }

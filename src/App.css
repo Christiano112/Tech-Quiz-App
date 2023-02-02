@@ -16,3 +16,7 @@
 .input {
   @apply px-4 py-2 rounded overflow-visible cursor-text border outline-none bg-white placeholder:text-slate-400 text-slate-800 focus:border-pink-500;
 }
+
+.action_btn {
+  @apply px-4 py-2 rounded overflow-visible cursor-pointer font-bold border outline-none bg-white placeholder:text-slate-400 text-slate-800 focus:border-pink-500;
+}

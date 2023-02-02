@@ -27,8 +27,8 @@ const Navbar = () => {
         </NavLink>
       </div>
       <ul className='flex justify-end items-center gap-2 pr-4'>
-        <NavLink to='/'>Home</NavLink>
-        <NavLink to='/dashboard'>Dashboard</NavLink>
+        <NavLink to='/' className='hover:font-bold hover:underline'>Home</NavLink>
+        <NavLink to='/dashboard' className='hover:font-bold hover:underline'>Dashboard</NavLink>
       </ul>
     </nav>
   )

@@ -77,14 +77,14 @@ const Home = () => {
                     </div>
 
                     <section className="mx-4">
-                        <h1 className="text-2xl font-bold mt-4">Start Playing Now!</h1>
+                        <h1 className="text-lg md:text-2xl font-bold mt-4">Start Playing Now!</h1>
                         <div
-                            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-white justify-center items-center my-12 mx-2"
+                            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-white justify-center items-center my-6 md:my-12 mx-2"
                         >
                             {category.map((type) => (
                                 <div key={type.id}
                                     onClick={() => { setQuizCategory(type.name); setShow(false) }}
-                                    className="border-2 shadow-md flex justify-center items-center flex-col py-2 h-72"
+                                    className="border-2 shadow-inner flex justify-center items-center flex-col py-2 h-72 cursor-pointer hover:shadow-2xl hover:font-bold"
                                 >
                                     <img src={type.img} alt='quiz-img'
                                         className="object-contain h-60 w-60" />

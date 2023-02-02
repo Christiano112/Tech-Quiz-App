@@ -145,17 +145,17 @@ const DashBoard = () => {
         <React.Fragment>
             <Navbar />
             <div className='mt-8'>
-                <h1 className='text-center font-bold text-2xl text-pink-500 mb-8'>This is your Dashboard</h1>
-                <h2 className='text-center font-bold text-xl mb-4 text-pink-500'>Your Total Score is: <span className='text-pink-500 font-black'>{totalScore}</span></h2>
+                <h1 className='text-center font-bold text-xl md:text-2xl text-pink-500 mb-8'>This is your Dashboard</h1>
+                <h2 className='text-center font-bold text-lg md:text-xl mb-4 text-pink-500'>Your Total Score is: <span className='text-pink-500 font-black'>{totalScore}</span></h2>
 
                 <div className='flex flex-col gap-4 justify-center items-center'>
-                    <h3 className='font-bold text-xl'>Which Chart Format Would You Like To See Scores?</h3>
+                    <h3 className='font-bold text-lg md:text-xl text-center px-4'>Which Chart Format Would You Like To See Scores?</h3>
                     <button onClick={() => setShowChart("bar")}
-                        className='cursor-pointer text-white rounded-lg shadow-lg select-none p-2 bg-pink-500 w-[25%] mt-2 mb-2'>
+                        className='cursor-pointer text-white rounded-lg shadow-lg select-none p-2 bg-pink-500 w-[25%] mt-1 mb-1'>
                         Bar
                     </button>
                     <button onClick={() => setShowChart("pie")}
-                        className='cursor-pointer text-white rounded-lg shadow-lg select-none p-2 bg-pink-500 w-[25%] mt-2 mb-2'>
+                        className='cursor-pointer text-white rounded-lg shadow-lg select-none p-2 bg-pink-500 w-[25%]'>
                         Pie
                     </button>
                 </div>

@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Modal from './modal';
 
 const Quiz = (quizCategory: any) => {
     const [questions, setQuestions]: any = React.useState("");
@@ -8,6 +9,7 @@ const Quiz = (quizCategory: any) => {
     const [page, setPage] = React.useState(1);
     const [answerValue, setAnswerValue] = React.useState("");
     const [score, setScore] = React.useState(0);
+    const [modalMessage, setModalMessage] = React.useState('');
     const [showModal, setShowModal] = React.useState(false);
 
     const navigate = useNavigate();
@@ -71,12 +73,11 @@ const Quiz = (quizCategory: any) => {
     let skip: number = page * 1 - 1;
 
     const handleModal = () => {
+        setModalMessage(`Your Score is ${score}`);
         setShowModal(true);
-        const ss: any = quizSection?.current
-        ss.style.display = "none";
-
         setTimeout(() => {
-            navigate('/dashBoard');
+            setShowModal(false);
+            navigate('/dashboard');
         }, 5000)
     }
 
@@ -165,7 +166,6 @@ const Quiz = (quizCategory: any) => {
                                             else if (page === 20) {
                                                 handleModal();
                                             }
-
                                             if (answerValue === correctAnswerValue) {
                                                 setScore((score) => score + 1);
                                             };
@@ -178,16 +178,12 @@ const Quiz = (quizCategory: any) => {
                             )
                         })}
                     </div>
-
-                    {showModal && (
-                        <section className="text-center py-40 px-4 shadow-md bg-pink-700 text-white">
-                            <h1 className='text-3xl font-bold'>
-                                {`Your Score is ${score}`}
-                            </h1>
-                        </section>
-                    )}
                 </div>
             }
+            {showModal &&
+                <Modal>
+                    {modalMessage}
+                </Modal>}
         </React.Fragment>
     )
 }

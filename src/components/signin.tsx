@@ -27,7 +27,7 @@ const SignIn = () => {
                 setShowModal(true);
                 setTimeout(() => {
                     navigate('/')
-                }, 10000)
+                }, 3000)
             })
             .catch((error) => {
                 console.log([error.code, error.message])
@@ -71,11 +71,15 @@ const SignIn = () => {
                 })
                 .catch((error) => {
                     console.log([error.code, error.message])
-                    setModalMessage('Registration Unsuccessful');
+                    if (error.code === 'auth/email-already-in-use') {
+                        setModalMessage('Email already in use');
+                    } else {
+                        setModalMessage('Registration Unsuccessful');
+                    }
                     setShowModal(true);
                     setTimeout(() => {
                         setShowModal(false)
-                    }, 3000)
+                    }, 10000)
                 });
 
             sendEmailVerification(auth.currentUser)
@@ -150,7 +154,7 @@ const SignIn = () => {
                             <input type='text' {...register('username', {
                                 required: 'Username is required',
                             })} aria-invalid={errors.username ? "true" : "false"}
-                                className='input' placeholder='Username' autoComplete='username'
+                                className='input' placeholder='Username'
                             />
                             {errors.username && <p role="alert" className='text-red-600 text-xs'>{`${errors.username?.message}`}</p>}
                         </div>

@@ -1,34 +1,52 @@
 import React from 'react'
 import Form from './form';
 import Navbar from './navbar';
+import Modal from './modal';
+import { signOut } from "firebase/auth";
+import { auth } from './config/firebase';
+
 
 const Settings = () => {
     const [showForm, setShowForm] = React.useState(true);
+    const [modalMessage, setModalMessage] = React.useState('');
+    const [showModal, setShowModal] = React.useState(false);
+
+    const handleSignOut = () => {
+        signOut(auth).then(() => {
+            // Sign-out successful.
+            // setModalMessage('Signed out successfully');
+            // setShowModal(true);
+        }).catch((error) => {
+            // An error happened.
+            console.log(error)
+            setModalMessage('Error signing out');
+            setShowModal(true);
+            setTimeout(() => {
+                setShowModal(false);
+            }, 3000)
+        });
+    }
 
     return (
         <React.Fragment>
             <Navbar />
             {showForm ?
-                <section className='p-8 bg-sky-600'>
+                <section className='bg-slate-800 h-[88.8vh] overflow-y-hidden py-8 px-4'>
                     <h1 className='text-center font-bold text-2xl text-pink-500 mb-10'>Settings</h1>
-                    <ul>
-                        <li>
-                            <button>Change Username</button>
-                        </li>
-                        <li>
-                            <button>Update profile picture</button>
-                        </li>
-                        <li>
-                            <button>Change email address</button>
-                        </li>
-                        <li>
-                            <button>Change password</button>
-                        </li>
-                    </ul>
+                    <div className='flex flex-col gap-4 justify-center items-center'>
+                        <button className='action_btn' onClick={() => setShowForm(false)}>Change Username and Picture</button>
+                        {/* <button className='action_btn'>Change email address</button>
+                        <button className='action_btn'>Change password</button> */}
+                        <button className='action_btn' onClick={() => handleSignOut()}>Sign Out</button>
+                    </div>
                 </section>
                 :
                 <Form />
             }
+            {showModal &&
+                <Modal>
+                    {modalMessage}
+                </Modal>}
         </React.Fragment>
     )
 }
