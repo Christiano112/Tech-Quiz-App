@@ -2,6 +2,7 @@ import React from "react";
 import Quiz from "./quiz";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from './config/firebase';
+import { useNavigate } from "react-router-dom";
 
 const category = [
     {
@@ -37,6 +38,7 @@ const Home = () => {
     const [show, setShow] = React.useState(true);
     const [score, setScore] = React.useState(0);
     const [userName, setUserName] = React.useState("");
+    const navigate = useNavigate();
 
     React.useEffect(() => {
         myLinuxScore = localStorage.getItem('Linux-score');
@@ -48,12 +50,13 @@ const Home = () => {
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // console.log(user)
+                console.log(user)
                 if (user.displayName) {
                     setUserName(user.displayName)
                 }
             } else {
                 // User is signed out
+                navigate('/signin')
             }
         });
     }, [])

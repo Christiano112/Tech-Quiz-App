@@ -1,12 +1,14 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from './config/firebase';
-import { Link, useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from 'react-router-dom';
+import Modal from './modal';
 
 const SignIn = () => {
     const [signedIn, setSignedIn] = React.useState(true);
+    const [modalMessage, setModalMessage] = React.useState('');
+    const [showModal, setShowModal] = React.useState(false);
     const navigate = useNavigate();
 
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -21,40 +23,92 @@ const SignIn = () => {
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log(user)
+                setModalMessage('Login Successful');
+                setShowModal(true);
                 setTimeout(() => {
                     navigate('/')
-                }, 3000)
+                }, 10000)
             })
             .catch((error) => {
-                const errorCode = error.code;
-                console.log(errorCode)
-                const errorMessage = error.message;
-                console.log(errorMessage)
+                console.log([error.code, error.message])
+                if (error.code === 'auth/user-not-found') {
+                    setModalMessage('Incorrect Email');
+                } else if (error.code === 'auth/wrong-password') {
+                    setModalMessage('Incorrect Password');
+                } else {
+                    setModalMessage("Incorrect Email or Password");
+                }
+                setShowModal(true);
+                setTimeout(() => {
+                    setShowModal(false)
+                }, 10000)
             });
     }
 
     const onRegisterSubmit = (data: any) => {
         console.log(data);
+
         const email = data.email;
         const password = data.pass;
+        const confirmPassword = data.password;
+        if (password !== confirmPassword) {
+            setModalMessage('Passwords do not match');
+            setShowModal(true);
+            setTimeout(() => {
+                setShowModal(false)
+            }, 10000)
+            return;
+        } else {
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    console.log(user);
+                    setModalMessage('Registration Successful');
+                    setShowModal(true);
+                    setTimeout(() => {
+                        navigate('/')
+                    }, 3000)
+                })
+                .catch((error) => {
+                    console.log([error.code, error.message])
+                    setModalMessage('Registration Unsuccessful');
+                    setShowModal(true);
+                    setTimeout(() => {
+                        setShowModal(false)
+                    }, 3000)
+                });
 
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                console.log(user)
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                console.log(errorCode)
-                const errorMessage = error.message;
-                console.log(errorMessage)
-            });
+            sendEmailVerification(auth.currentUser)
+                .then(() => {
+                    // Email verification sent!
+                    // ...
+                });
+            const actionCodeSettings = {
+                url: 'quiz-app-c20a3.firebaseapp.com/?email=' + auth.currentUser.email,
+                iOS: {
+                    bundleId: 'com.example.ios'
+                },
+                android: {
+                    packageName: 'com.example.android',
+                    installApp: true,
+                    minimumVersion: '12'
+                },
+                handleCodeInApp: false,
+                // When multiple custom dynamic link domains are defined, specify which
+                // one to use.
+                dynamicLinkDomain: "quiz-app-c20a3.firebaseapp.com"
+            };
+            auth.sendEmailVerification(auth.currentUser, actionCodeSettings)
+                .then(function () {
+                    // Verification email sent.
+                    alert("Email Sent")
+                })
+                .catch(function (error: any) {
+                    // Error occurred. Inspect error.code.
+                    alert("Unsuccessful")
+                });
+        }
 
-        sendEmailVerification(auth.currentUser)
-            .then(() => {
-                // Email verification sent!
-                // ...
-            });
     };
 
     return (
@@ -70,21 +124,20 @@ const SignIn = () => {
                         <div>
                             <input type='email' {...register('email', {
                                 required: 'Please input your email',
-                                pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: 'Invalid email address' },
+                                pattern: { value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, message: 'Invalid email address' },
                             })} aria-invalid={errors.email ? "true" : "false"}
-                                className='input' placeholder='Email'
+                                className='input' placeholder='Email' autoComplete='email'
                             />
-                            {errors.email && <p role="alert" className='text-red-600 text-xs'>Invalid Email</p>}
+                            {errors.email && <p role="alert" className='text-red-600 text-xs'>{`${errors.email?.message}`}</p>}
                         </div>
                         <div>
                             <input type='password' {...register('pass', {
                                 required: 'Password is required',
                                 minLength: { value: 8, message: 'Password must be at least 8 characters' },
-                                pattern: { value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, message: 'Password must contain at least one letter and one number' },
                             })} aria-invalid={errors.password ? "true" : "false"}
-                                className='input' placeholder='Password'
+                                className='input' placeholder='Password' autoComplete="current-password"
                             />
-                            {errors.password && <p role="alert" className='text-red-600 text-xs'>Invalid Password</p>}
+                            {errors.pass && <p role="alert" className='text-red-600 text-xs'>{`${errors.pass?.message}`}</p>}
                         </div>
                         <button type="submit" className='btn'>Sign In</button>
                     </form>
@@ -94,50 +147,54 @@ const SignIn = () => {
                     <h1 className='text-xl md:text-3xl text-center text-slate-800 font-bold py-8 px-4'>Create an account</h1>
                     <form onSubmit={handleSubmit(onRegisterSubmit)} className='flex flex-col gap-4 justify-center items-center mt-8'>
                         <div>
-                            <input {...register('username', {
-                                required: 'Input Username',
-                                minLength: { value: 8, message: 'Username must be at least 8 characters' }
+                            <input type='text' {...register('username', {
+                                required: 'Username is required',
                             })} aria-invalid={errors.username ? "true" : "false"}
-                            className='input' placeholder='Username'
+                                className='input' placeholder='Username' autoComplete='username'
                             />
-                            {errors.username?.type === 'required' && <p role="alert" className='text-red-600 text-xs'>Username is required</p>}
+                            {errors.username && <p role="alert" className='text-red-600 text-xs'>{`${errors.username?.message}`}</p>}
                         </div>
                         <div>
                             <input type='email' {...register('email', {
                                 required: 'Please input your email',
-                                pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: 'Invalid email address' },
+                                pattern: { value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, message: 'Invalid email address' },
                             })} aria-invalid={errors.email ? "true" : "false"}
-                            className='input' placeholder='Email'
+                                className='input' placeholder='Email' autoComplete='email'
                             />
-                            {errors.email && <p role="alert" className='text-red-600 text-xs'>Invalid Email</p>}
+                            {errors.email && <p role="alert" className='text-red-600 text-xs'>{`${errors.email?.message}`}</p>}
                         </div>
                         <div>
                             <input type='password' {...register('pass', {
                                 required: 'Password is required',
                                 minLength: { value: 8, message: 'Password must be at least 8 characters' },
-                                pattern: { value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, message: 'Password must contain at least one letter and one number' },
                             })} aria-invalid={errors.password ? "true" : "false"}
-                            className='input' placeholder='Password'
+                                className='input' placeholder='Password' autoComplete="new-password"
                             />
-                            {errors.pass && <p role="alert" className='text-red-600 text-xs'>Invalid Password</p>}
+                            {errors.pass && <p role="alert" className='text-red-600 text-xs'>{`${errors.pass?.message}`}</p>}
                         </div>
                         <div>
                             <input type='password' {...register('password', {
-                                required: 'Please Confirm Password',
+                                required: 'Password is required',
+                                minLength: { value: 8, message: 'Password must be at least 8 characters' },
                                 // validate: {
                                 //     matchesPreviousPassword: (value) => {
                                 //         const { pass } = getValues();
                                 //         return pass === value || 'Passwords should match!';
                                 //     }
                                 // }
-                            })}
-                            className='input' placeholder='Confirm Password'
-                             />
+                            })} aria-invalid={errors.pass ? "true" : "false"}
+                                className='input' placeholder='Confirm Password' autoComplete="new-password"
+                            />
+                            {errors.password && <p role="alert" className='text-red-600 text-xs'>{`${errors.password?.message}`}</p>}
                         </div>
                         <button type="submit" className='btn'>Sign Up</button>
                     </form>
                 </section>
             }
+            {showModal &&
+                <Modal>
+                    {modalMessage}
+                </Modal>}
         </section>
     )
 }

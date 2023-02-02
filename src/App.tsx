@@ -1,4 +1,3 @@
-import React from 'react';
 import './App.css';
 import Quiz from './components/quiz';
 import ErrorPage from './components/error';
@@ -11,7 +10,7 @@ import { Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <div className='min-h-[100vh] h-[100vh]'>
+    <div className='min-h-[100vh] h-[100vh] scroll-smooth'>
       <Routes>
         <Route index path="/" element={<Layout />} />
         <Route path="/signin" element={<SignIn  />} />
