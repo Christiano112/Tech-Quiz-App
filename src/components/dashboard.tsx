@@ -1,25 +1,12 @@
-import {
-    Chart as ChartJS,
-    LinearScale,
-    CategoryScale,
-    BarElement,
-    PointElement,
-    LineElement,
-    Legend,
-    Tooltip,
-    Filler,
-    ArcElement
-} from 'chart.js';
-import {
-    Chart,
-    getDatasetAtEvent,
-    getElementAtEvent,
-    getElementsAtEvent,
-} from 'react-chartjs-2';
+import { Chart as ChartJS, LinearScale, CategoryScale, BarElement, PointElement, LineElement, Legend, Tooltip, Filler, ArcElement } from 'chart.js';
+import { Chart, getDatasetAtEvent, getElementAtEvent, getElementsAtEvent } from 'react-chartjs-2';
 import React, { MouseEvent, useRef } from 'react';
 import type { InteractionItem } from 'chart.js'
 import { Pie } from 'react-chartjs-2';
 import Navbar from './navbar';
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from './config/firebase';
+import { useNavigate } from "react-router-dom";
 
 let myLinuxScore: any;
 let myDevOpsScore: any;
@@ -27,17 +14,7 @@ let myCodeScore: any;
 let mySQLScore: any;
 let myTotalScore: any;
 
-ChartJS.register(
-    LinearScale,
-    CategoryScale,
-    BarElement,
-    PointElement,
-    LineElement,
-    Legend,
-    Tooltip,
-    Filler,
-    ArcElement
-);
+ChartJS.register(LinearScale, CategoryScale, BarElement, PointElement, LineElement, Legend, Tooltip, Filler, ArcElement);
 
 
 export const options = {
@@ -53,7 +30,8 @@ const labels = ['Linux', 'DevOps', 'Code', 'SQL'];
 
 const DashBoard = () => {
     const [totalScore, setTotalScore] = React.useState(0);
-    const [showChart, setShowChart] = React.useState("")
+    const [showChart, setShowChart] = React.useState("");
+    const navigate = useNavigate();
 
     React.useEffect(() => {
         myLinuxScore = localStorage.getItem('Linux-score');
@@ -62,6 +40,15 @@ const DashBoard = () => {
         mySQLScore = localStorage.getItem('SQL-score');
         myTotalScore = Number(myLinuxScore) + Number(myDevOpsScore) + Number(myCodeScore) + Number(mySQLScore);
         setTotalScore(myTotalScore);
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+            } else {
+                // User is signed out
+                navigate('/signin')
+            }
+        });
     }, []);
 
     const pieData = {

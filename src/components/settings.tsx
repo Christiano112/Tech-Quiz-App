@@ -18,6 +18,9 @@ const Settings = () => {
             // Sign-out successful.
             setModalMessage('Signed out successfully');
             setShowModal(true);
+            setTimeout(() => {
+                navigate('/signin')
+            }, 3000)
         }).catch((error) => {
             // An error happened.
             console.log(error)

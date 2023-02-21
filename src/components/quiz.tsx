@@ -18,6 +18,7 @@ const Quiz = (quizCategory: any) => {
     const [score, setScore] = React.useState(0);
     const [modalMessage, setModalMessage] = React.useState('');
     const [showModal, setShowModal] = React.useState(false);
+    const [diff, setDiff] = React.useState("")
 
     const navigate = useNavigate();
     const quizSection = React.useRef<HTMLDivElement>(null);
@@ -125,7 +126,7 @@ const Quiz = (quizCategory: any) => {
                                 correctAnswerValue = "Bonus Question";
                             }
 
-                            // console.log(correctAnswerValue);
+                            console.log(correctAnswerValue);
 
                             return (
                                 <div key={id} className='p-4 mb-8'>
@@ -155,7 +156,11 @@ const Quiz = (quizCategory: any) => {
                                     <div className='flex justify-center items-center gap-4 mt-4'>
                                         <button disabled={page <= 1} onClick={() => {
                                             setPage(page => page - 1);
-                                            setScore((score) => score - 1);
+                                            if (diff === "True") {
+                                                setScore((score) => score - 1);
+                                            }
+                                            // setScore((score) => score - 1);
+                                            setDiff("")
                                             setAnswerValue("");
                                         }}
                                             className='py-1 px-4 rounded-full bg-sky-600 shadow-lg font-bold m-2 select-none'>Prev</button>
@@ -168,9 +173,11 @@ const Quiz = (quizCategory: any) => {
                                             }
                                             if (answerValue === correctAnswerValue) {
                                                 setScore((score) => score + 1);
+                                                setDiff("True")
                                             };
 
                                             localStorage.setItem(`${Object.values(quizCategory)}-score`, JSON.stringify(score));
+                                            setAnswerValue("");
                                         }}
                                             className='py-1 px-4 rounded-full bg-sky-600 shadow-lg font-bold m-2 select-none'>Next</button>
                                     </div>
