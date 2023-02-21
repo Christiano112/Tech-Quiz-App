@@ -50,7 +50,7 @@ const Home = () => {
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                console.log(user)
+                // console.log(user)
                 if (user.displayName) {
                     setUserName(user.displayName)
                 }

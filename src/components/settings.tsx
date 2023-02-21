@@ -16,8 +16,8 @@ const Settings = () => {
     const handleSignOut = () => {
         signOut(auth).then(() => {
             // Sign-out successful.
-            // setModalMessage('Signed out successfully');
-            // setShowModal(true);
+            setModalMessage('Signed out successfully');
+            setShowModal(true);
         }).catch((error) => {
             // An error happened.
             console.log(error)

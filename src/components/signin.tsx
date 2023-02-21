@@ -14,7 +14,7 @@ const SignIn = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const onLoginSubmit = (data: any) => {
-        console.log(data);
+        // console.log(data);
 
         const email = data.email;
         const password = data.pass;
@@ -22,7 +22,7 @@ const SignIn = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
-                console.log(user)
+                // console.log(user)
                 setModalMessage('Login Successful');
                 setShowModal(true);
                 setTimeout(() => {
@@ -46,7 +46,7 @@ const SignIn = () => {
     }
 
     const onRegisterSubmit = (data: any) => {
-        console.log(data);
+        // console.log(data);
 
         const email = data.email;
         const password = data.pass;
@@ -62,7 +62,7 @@ const SignIn = () => {
             createUserWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
                     const user = userCredential.user;
-                    console.log(user);
+                    // console.log(user);
                     setModalMessage('Registration Successful');
                     setShowModal(true);
                     setTimeout(() => {

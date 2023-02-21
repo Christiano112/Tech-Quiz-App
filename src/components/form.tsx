@@ -24,7 +24,7 @@ const Form = ({ }) => {
                 setShowModal(false);
                 navigate('/');
             }, 3000)
-            console.log([auth.currentUser?.displayName, auth.currentUser?.photoURL])
+            // console.log([auth.currentUser?.displayName, auth.currentUser?.photoURL])
 
         }).catch((error) => {
             // An error occurred
