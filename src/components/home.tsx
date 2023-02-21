@@ -56,10 +56,10 @@ const Home = () => {
                 }
             } else {
                 // User is signed out
-                navigate('/signin')
+                // navigate('/signin')
             }
         });
-    }, [])
+    }, [navigate])
 
     return (
         <React.Fragment>
@@ -68,7 +68,7 @@ const Home = () => {
                     <div className="flex items-center justify-between px-4 pt-4">
                         <div className="flex items-center gap-2">
                             <p>Welcome</p>
-                            <p className="font-bold">{userName && userName}</p>
+                            <p className="font-bold">{userName ? userName : 'Anonymous'}</p>
                         </div>
                         <div className="flex items-center gap-2">
                             <img src="/coin-min.jpeg" alt="coins" className="w-8 h-8 rounded-full" />

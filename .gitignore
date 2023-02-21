@@ -26,3 +26,5 @@ ui-debug.log
 pubsub-debug.log
 database-debug.log
 firestore-debug.log
+
+.vscode

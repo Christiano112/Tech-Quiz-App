@@ -3,6 +3,13 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Modal from './modal';
 
+let myLinuxScore: any;
+let myDevOpsScore: any;
+let myCodeScore: any;
+let mySQLScore: any;
+let myCurrentScore: any;
+let quizObj: any;
+
 const Quiz = (quizCategory: any) => {
     const [questions, setQuestions]: any = React.useState("");
     const [loading, setLoading] = React.useState(true);
@@ -14,13 +21,6 @@ const Quiz = (quizCategory: any) => {
 
     const navigate = useNavigate();
     const quizSection = React.useRef<HTMLDivElement>(null);
-
-    let myLinuxScore: any;
-    let myDevOpsScore: any;
-    let myCodeScore: any;
-    let mySQLScore: any;
-    let myCurrentScore: any;
-    let quizObj: any;
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -68,7 +68,7 @@ const Quiz = (quizCategory: any) => {
 
         localStorage.setItem(`${Object.values(quizCategory)}-score`, JSON.stringify(myCurrentScore));
 
-    }, []);
+    }, [quizCategory]);
 
     let skip: number = page * 1 - 1;
 
@@ -109,7 +109,7 @@ const Quiz = (quizCategory: any) => {
                             let correctAnswer = `${q.correct_answer}`;
                             let correctAnswerValue: any;
 
-                            console.log(optionA, optionB, optionC, optionD, correctAnswer);
+                            // console.log(optionA, optionB, optionC, optionD, correctAnswer);
 
                             if (correctAnswer === "answer_a") {
                                 correctAnswerValue = optionA;
@@ -125,7 +125,7 @@ const Quiz = (quizCategory: any) => {
                                 correctAnswerValue = "Bonus Question";
                             }
 
-                            console.log(correctAnswerValue);
+                            // console.log(correctAnswerValue);
 
                             return (
                                 <div key={id} className='p-4 mb-8'>
